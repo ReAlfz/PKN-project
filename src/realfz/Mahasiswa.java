@@ -1,4 +1,10 @@
 package realfz;
 
-public class Mahasiswa {
+import javax.swing.*;
+
+public class Mahasiswa extends JFrame {
+
+    public Mahasiswa() {
+        this.setSize(200, 200);
+    }
 }
