@@ -1,4 +1,6 @@
 package realfz;
 
-public class Dosen {
+import javax.swing.*;
+
+public class Dosen extends JFrame {
 }

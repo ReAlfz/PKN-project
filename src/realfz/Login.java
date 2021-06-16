@@ -30,10 +30,11 @@ public class Login extends JFrame{
                 if (mahasiswaRadioButton.isSelected()){
                     try {
                         String sql = "select * from mahasiswa where nim='" + txt_user.getText() + "' and password='" + txt_pass.getText() + "'";
-                        ResultSet resultSet = DataBase.getDatafromDataBase().executeQuery(sql);
+                        Statement statement = DataBase.getDatafromDataBase().createStatement();
+                        ResultSet resultSet = statement.executeQuery(sql);
                         while (resultSet.next()){
                             if (txt_user.getText().equals(String.valueOf(resultSet.getInt("nim"))) && txt_pass.getText().equals(resultSet.getString("password"))){
-                                JFrame frame = new Mahasiswa();
+                                JFrame frame = new Mahasiswa(txt_user.getText());
                                 frame.setVisible(true);
                                 this.dispose();
                             } else {
@@ -47,10 +48,11 @@ public class Login extends JFrame{
                 } else if (adminRadioButton.isSelected()){
                     try {
                         String sql = "select * from admin where code='" + txt_user.getText() + "' and password='" + txt_pass.getText() + "'";
-                        ResultSet resultSet = DataBase.getDatafromDataBase().executeQuery(sql);
+                        Statement statement = DataBase.getDatafromDataBase().createStatement();
+                        ResultSet resultSet = statement.executeQuery(sql);
                         while (resultSet.next()){
                             if (txt_user.getText().equals(String.valueOf(resultSet.getInt("code"))) && txt_pass.getText().equals(resultSet.getString("password"))){
-                                JFrame frame = new Mahasiswa();
+                                JFrame frame = new Admin();
                                 frame.setVisible(true);
                                 this.dispose();
                             } else {
@@ -64,10 +66,11 @@ public class Login extends JFrame{
                 } else {
                     try {
                         String sql = "select * from dosen where no_induk='" + txt_user.getText() + "' and password='" + txt_pass.getText() + "'";
-                        ResultSet resultSet = DataBase.getDatafromDataBase().executeQuery(sql);
+                        Statement statement = DataBase.getDatafromDataBase().createStatement();
+                        ResultSet resultSet = statement.executeQuery(sql);
                         while (resultSet.next()){
                             if (txt_user.getText().equals(String.valueOf(resultSet.getInt("no_induk"))) && txt_pass.getText().equals(resultSet.getString("password"))){
-                                JFrame frame = new Mahasiswa();
+                                JFrame frame = new Dosen();
                                 frame.setVisible(true);
                                 this.dispose();
                             } else {

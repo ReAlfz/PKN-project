@@ -1,4 +1,6 @@
 package realfz;
 
-public class Admin {
+import javax.swing.*;
+
+public class Admin extends JFrame {
 }
