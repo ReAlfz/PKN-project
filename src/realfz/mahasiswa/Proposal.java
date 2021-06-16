@@ -96,19 +96,5 @@ public class Proposal extends JFrame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("*.pdf", "pdf");
         jfile.addChoosableFileFilter(filter);
         return jfile;
-//        FileInputStream fileInput = null;
-//        if (fileName.endsWith(".pdf")){
-//            if (result == JFileChooser.APPROVE_OPTION){
-//                try{
-//                    fileInput = new FileInputStream(path);
-//
-//                } catch (Exception e){
-//                    JOptionPane.showMessageDialog(null, "error because " + e);
-//                }
-//            }
-//
-//        } else {
-//            JOptionPane.showMessageDialog(null, "pastikan menggunakan format pdf");
-//        }
     }
 }
