@@ -5,21 +5,19 @@ import realfz.DataBase;
 import realfz.model.ModelPendaftaran;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class PendaftaranUjian extends JFrame {
+    private final List<ModelPendaftaran> list = new ArrayList<>();
     private JTable table1;
     private JPanel main;
     private JPanel mains;
@@ -33,19 +31,19 @@ public class PendaftaranUjian extends JFrame {
     private JScrollPane Jscroll;
     private JTextField txt_noInduk;
     private JButton downloadButton;
-    private final List<ModelPendaftaran> list = new ArrayList<>();
+    private JButton laporanButton;
     private String nim;
 
     public PendaftaranUjian(String code) {
         this.setContentPane(main);
         this.setSize(510, 500);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width / 2-this.getSize().height/2, dim.height/2-this.getSize().height/2);
+        this.setLocation(dim.width / 2 - this.getSize().height / 2, dim.height / 2 - this.getSize().height / 2);
 
         setTables();
         Jscroll.setEnabled(false);
 
-        kembaliButton.addActionListener(event ->{
+        kembaliButton.addActionListener(event -> {
             JFrame frame = new Admin(code);
             frame.setVisible(true);
             this.dispose();
@@ -53,13 +51,13 @@ public class PendaftaranUjian extends JFrame {
 
         btn_submit.addActionListener(event -> {
             String sql = "insert into jadwal (code, nim, no_induk, nilai, tanggal, waktu, tempat) values (?, ?, ?, ?, ?, ?, ?)";
-            try{
+            try {
                 if (!txt_nim.getText().equals("") || !txt_nilai.getText().equals("") || !txt_tempat.getText().equals("")
-                        || !txt_tanggal.getText().equals("") || !txt_waktu.getText().equals("")){
+                        || !txt_tanggal.getText().equals("") || !txt_waktu.getText().equals("")) {
                     PreparedStatement setter = DataBase.getDatafromDataBase().prepareStatement(sql);
                     setter.setInt(1, Integer.parseInt(code));
                     setter.setInt(2, Integer.parseInt(txt_nim.getText()));
-                    setter.setInt(3,Integer.parseInt(txt_noInduk.getText()));
+                    setter.setInt(3, Integer.parseInt(txt_noInduk.getText()));
                     setter.setString(4, txt_nilai.getText());
                     setter.setString(5, txt_tanggal.getText());
                     setter.setString(6, txt_waktu.getText());
@@ -80,25 +78,54 @@ public class PendaftaranUjian extends JFrame {
             FileOutputStream output = null;
             try {
                 PreparedStatement getter = DataBase.getDatafromDataBase().prepareStatement(sql);
-                if (nim != null){
+                if (nim != null) {
                     getter.setInt(1, Integer.parseInt(nim));
                     ResultSet result = getter.executeQuery();
-                    output = new FileOutputStream(new File("E:/storage/" + nim + ".pdf"));
+                    output = new FileOutputStream(new File("E:/storage/" + "bukti_" + nim + ".pdf"));
                     if (result.next()) {
                         input = result.getBinaryStream("bukti_nilai");
                         int read;
-                        while ((read = input.read())!= -1){
+                        while ((read = input.read()) != -1) {
                             output.write(read);
                         }
                     }
                     input.close();
                     output.flush();
                     output.close();
-                    JOptionPane.showMessageDialog(null, "Data telah terdownload");
+                    JOptionPane.showMessageDialog(null, "Data telah terdownload di E:/");
                 } else {
                     JOptionPane.showMessageDialog(null, "Pilih data di tabel terlebih dahulu");
                 }
 
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error : " + e);
+            }
+        });
+
+        laporanButton.addActionListener(event -> {
+            String sql = "select * from pendaftaran where nim = ?";
+            InputStream input = null;
+            FileOutputStream output = null;
+            try {
+                PreparedStatement getter = DataBase.getDatafromDataBase().prepareStatement(sql);
+                if (nim != null) {
+                    getter.setInt(1, Integer.parseInt(nim));
+                    ResultSet result = getter.executeQuery();
+                    output = new FileOutputStream(new File("E:/storage/" + "laporan_" + nim + ".pdf"));
+                    if (result.next()) {
+                        input = result.getBinaryStream("bukti_nilai");
+                        int read;
+                        while ((read = input.read()) != -1) {
+                            output.write(read);
+                        }
+                    }
+                    input.close();
+                    output.flush();
+                    output.close();
+                    JOptionPane.showMessageDialog(null, "Data telah terdownload di E:/");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Pilih data di tabel terlebih dahulu");
+                }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error : " + e);
             }
@@ -111,7 +138,7 @@ public class PendaftaranUjian extends JFrame {
             Statement statement = DataBase.getDatafromDataBase().createStatement();
             ResultSet result = statement.executeQuery(sql);
 
-            while (result.next()){
+            while (result.next()) {
                 list.add(new ModelPendaftaran(result.getInt("nim"), result.getString("nilai")));
             }
             TableModeling modeling = new TableModeling(list);
@@ -122,11 +149,11 @@ public class PendaftaranUjian extends JFrame {
         }
         table1.setAutoCreateRowSorter(true);
 
-        table1.getSelectionModel().addListSelectionListener(event ->{
-            if(!table1.getSelectionModel().isSelectionEmpty()){
+        table1.getSelectionModel().addListSelectionListener(event -> {
+            if (!table1.getSelectionModel().isSelectionEmpty()) {
                 int selectedRow = table1.convertRowIndexToModel(table1.getSelectedRow());
                 ModelPendaftaran data = list.get(selectedRow);
-                if (data != null){
+                if (data != null) {
                     nim = String.valueOf(data.getNim());
                     txt_nim.setText(nim);
                     txt_nilai.setText(data.getNilai());
@@ -139,7 +166,7 @@ public class PendaftaranUjian extends JFrame {
         private final String[] header = {"Nim", "Nilai"};
         private final List<ModelPendaftaran> list;
 
-        private TableModeling(List<ModelPendaftaran> list){
+        private TableModeling(List<ModelPendaftaran> list) {
             this.list = list;
         }
 

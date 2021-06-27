@@ -149,10 +149,10 @@
           </component>
           <component id="3709d" class="javax.swing.JLabel">
             <constraints>
-              <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="File nilai "/>
+              <text value="File siswa"/>
             </properties>
           </component>
           <component id="6c0ac" class="javax.swing.JButton" binding="downloadButton" default-binding="true">
@@ -160,7 +160,15 @@
               <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Download"/>
+              <text value="Bukti"/>
+            </properties>
+          </component>
+          <component id="fa4c9" class="javax.swing.JButton" binding="laporanButton" default-binding="true">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Laporan"/>
             </properties>
           </component>
         </children>

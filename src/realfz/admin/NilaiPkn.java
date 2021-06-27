@@ -1,5 +1,9 @@
 package realfz.admin;
 
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
 import realfz.Admin;
 import realfz.DataBase;
 import realfz.model.ModelNilai;
@@ -7,6 +11,7 @@ import realfz.model.ModelNilai;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -24,6 +29,7 @@ public class NilaiPkn extends JFrame {
     private JTextField txt_nilai_final;
     private JButton submitButton;
     private JButton kembaliButton;
+    private JButton exportButton;
     private List<ModelNilai> list = new ArrayList<>();
 
     public NilaiPkn(String code) {
@@ -64,6 +70,37 @@ public class NilaiPkn extends JFrame {
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "tolong pilih data dari tabel");
+            }
+        });
+
+        exportButton.addActionListener(event -> {
+            try {
+                String sql = "select * from nilai_final";
+                Statement statement = DataBase.getDatafromDataBase().createStatement();
+                ResultSet result = statement.executeQuery(sql);
+
+                WritableWorkbook workbook = Workbook.createWorkbook(new File("E:/storage/" + "Hasil_Nilai.xls"));
+                WritableSheet sheet = workbook.createSheet("Sheet baru", 0);
+                sheet.addCell(new jxl.write.Label(0, 0, "nim"));
+                sheet.addCell(new jxl.write.Label(1, 0, " no induk"));
+                sheet.addCell(new jxl.write.Label(2, 0, "nilai dari perusahaan"));
+                sheet.addCell(new jxl.write.Label(3, 0, "Nilai dari Ujian"));
+                sheet.addCell(new jxl.write.Label(4, 0, "Nilai Final"));
+
+                int numbers = 1;
+                while (result.next()){
+                    sheet.addCell(new jxl.write.Label(0, numbers, result.getString("nim")));
+                    sheet.addCell(new jxl.write.Label(1, numbers, result.getString("no_induk")));
+                    sheet.addCell(new jxl.write.Label(2, numbers, result.getString("nilai_perusahaan")));
+                    sheet.addCell(new jxl.write.Label(3, numbers, result.getString("nilai_ujian")));
+                    sheet.addCell(new Label(4, numbers, result.getString("nilai_final")));
+                    numbers++;
+                }
+                workbook.write();
+                workbook.close();
+                JOptionPane.showMessageDialog(null, "Data telah terexport ke excel di E:/");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error : " + e);
             }
         });
     }
