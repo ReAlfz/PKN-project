@@ -7,8 +7,6 @@ import javax.mail.*;
 import javax.mail.internet.MimeBodyPart;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -77,7 +75,12 @@ public class Approval extends JFrame {
         properties.setProperty("mail.pop3.socketFactory.fallback", "false");
         properties.setProperty("mail.pop3.socketFactory.port", "995");
 
-        Session session = Session.getDefaultInstance(properties);
+        Session session = Session.getDefaultInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, pass);
+            }
+        });
 
         try {
             Store store = session.getStore("pop3");
