@@ -62,8 +62,8 @@ public class Approval extends JFrame {
     }
 
     private void getEmails() {
-        String user = "alfianrudiyanto1@webmail.umm.ac.id";
-        String pass = "42425566";
+        String user = "xxxx";
+        String pass = "xxxx";
 
         Properties properties = new Properties();
 
@@ -109,12 +109,10 @@ public class Approval extends JFrame {
                     for (int partCount = 0; partCount < numberOfParts; partCount++) {
                         MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(partCount);
                         if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
-                            // this part is attachment
                             String fileName = part.getFileName();
                             attachFiles += fileName + ", ";
                             part.saveFile("E:/storage" + File.separator + fileName);
                         } else {
-                            // this part may be the message content
                             messageContent = part.getContent().toString();
                         }
                     }

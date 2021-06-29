@@ -86,6 +86,8 @@ public class Proposal extends JFrame {
                 try {
                     if (!txt_tempat.getText().equals("") || !txt_waktu.getText().equals("")
                             || !txt_to_email.getText().equals("")  || !txt_subject_email.getText().equals("")) {
+                        String user = "xxxx";
+                        String pass = "xxxx";
                         Properties properties = new Properties();
                         properties.put("mail.smtp.auth", "true");
                         properties.put("mail.smtp.starttls.enable", "true");
@@ -94,7 +96,7 @@ public class Proposal extends JFrame {
                         Session session = Session.getDefaultInstance(properties, new Authenticator() {
                             @Override
                             protected PasswordAuthentication getPasswordAuthentication() {
-                                return new PasswordAuthentication("alfianrudiyanto1@gmail.com", "Alfian902901");
+                                return new PasswordAuthentication(user, pass);
                             }
                         });
 
@@ -122,6 +124,7 @@ public class Proposal extends JFrame {
                         prepare.setString(4, txt_waktu.getText());
                         prepare.setInt(5, Integer.parseInt(nim));
                         prepare.executeUpdate();
+                        session.getStore().close();
 
                         JOptionPane.showMessageDialog(null, "Data telah Terupload");
                     } else {
